@@ -1,7 +1,7 @@
 # Code your own blockchain in less than 200 lines of Go!
 
 ### Deployment steps:
-- `git clone https://github.com/matin-n/blockchain-tutorial`
+- `git clone https://github.com/matin-n/blockchain-go`
 - navigate to this directory and rename the example file `mv example.env .env`
 - `go run main.go`
 - open a web browser and visit `http://localhost:8080/`
@@ -13,4 +13,4 @@
 
 ### Screenshot
 
-![screen](https://user-images.githubusercontent.com/15616604/35492333-2829f690-0461-11e8-8c1f-8a0258d370e8.png)
+![screen](https://user-images.githubusercontent.com/40713017/43980872-96efb3f4-9ca4-11e8-81c5-fa290ce243c0.png)
