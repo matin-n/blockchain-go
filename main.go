@@ -21,7 +21,7 @@ import (
 type Block struct {
 	Index     int
 	Timestamp string
-	BPM       int
+	Data       string
 	Hash      string
 	PrevHash  string
 }
@@ -29,9 +29,9 @@ type Block struct {
 // Blockchain is a series of validated Blocks
 var Blockchain []Block
 
-// Message takes incoming JSON payload for writing heart rate
+// Message takes incoming JSON payload for writing data
 type Message struct {
-	BPM int
+	Data string
 }
 
 var mutex = &sync.Mutex{}
@@ -45,7 +45,7 @@ func main() {
 	go func() {
 		t := time.Now()
 		genesisBlock := Block{}
-		genesisBlock = Block{0, t.String(), 0, calculateHash(genesisBlock), ""}
+		genesisBlock = Block{0, t.String(), "First Block", calculateHash(genesisBlock), ""}		
 		spew.Dump(genesisBlock)
 
 		mutex.Lock()
@@ -94,7 +94,7 @@ func handleGetBlockchain(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(bytes))
 }
 
-// takes JSON payload as an input for heart rate (BPM)
+// takes JSON payload as an input for 'Data'
 func handleWriteBlock(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var m Message
@@ -107,7 +107,7 @@ func handleWriteBlock(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	mutex.Lock()
-	newBlock := generateBlock(Blockchain[len(Blockchain)-1], m.BPM)
+	newBlock := generateBlock(Blockchain[len(Blockchain)-1], m.Data)
 	mutex.Unlock()
 
 	if isBlockValid(newBlock, Blockchain[len(Blockchain)-1]) {
@@ -149,7 +149,7 @@ func isBlockValid(newBlock, oldBlock Block) bool {
 
 // SHA512 hashing
 func calculateHash(block Block) string {
-	record := strconv.Itoa(block.Index) + block.Timestamp + strconv.Itoa(block.BPM) + block.PrevHash
+	record := strconv.Itoa(block.Index) + block.Timestamp + block.Data + block.PrevHash
 	h := sha512.New()
 	h.Write([]byte(record))
 	hashed := h.Sum(nil)
@@ -157,7 +157,7 @@ func calculateHash(block Block) string {
 }
 
 // create a new block using previous block's hash
-func generateBlock(oldBlock Block, BPM int) Block {
+func generateBlock(oldBlock Block, Data string) Block {
 
 	var newBlock Block
 
@@ -165,7 +165,7 @@ func generateBlock(oldBlock Block, BPM int) Block {
 
 	newBlock.Index = oldBlock.Index + 1
 	newBlock.Timestamp = t.String()
-	newBlock.BPM = BPM
+	newBlock.Data = Data
 	newBlock.PrevHash = oldBlock.Hash
 	newBlock.Hash = calculateHash(newBlock)
 
