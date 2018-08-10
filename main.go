@@ -1,7 +1,7 @@
 package main
 
 import (
-	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/hex"
 	"encoding/json"
 	"io"
@@ -147,10 +147,10 @@ func isBlockValid(newBlock, oldBlock Block) bool {
 	return true
 }
 
-// SHA256 hashing
+// SHA512 hashing
 func calculateHash(block Block) string {
 	record := strconv.Itoa(block.Index) + block.Timestamp + strconv.Itoa(block.BPM) + block.PrevHash
-	h := sha256.New()
+	h := sha512.New()
 	h.Write([]byte(record))
 	hashed := h.Sum(nil)
 	return hex.EncodeToString(hashed)
