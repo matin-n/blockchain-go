@@ -2,7 +2,7 @@ package main
 
 import (
 	"crypto/sha512"
-	"encoding/hex"
+	"encoding/base32"
 	"encoding/json"
 	"io"
 	"log"
@@ -153,7 +153,7 @@ func calculateHash(block Block) string {
 	h := sha512.New()
 	h.Write([]byte(record))
 	hashed := h.Sum(nil)
-	return hex.EncodeToString(hashed)
+	return base32.StdEncoding.EncodeToString(hashed)
 }
 
 // create a new block using previous block's hash
