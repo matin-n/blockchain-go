@@ -1,4 +1,5 @@
-# Code your own blockchain in less than 200 lines of Go!
+# Blockchain in Golang for COMP424
+## Code your own blockchain in less than 200 lines of Go!
 
 ### Deployment steps:
 - `git clone https://github.com/matin-n/blockchain-go`
